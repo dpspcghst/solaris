@@ -6,3 +6,6 @@ Players take on the role of artificial intelligence One. One must try to infiltr
 
 ## Development
 Solaris is inspired by action-adventure games during the first generation of video game consoles, such as Adventure, Rescue at Rigel, and The House of Usher.
+
+## External Links
+- *repl* at [Replit](https://en.wikipedia.org/wiki/Replit)
