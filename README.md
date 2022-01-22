@@ -13,4 +13,4 @@ The primary character in Solaris is an artificial intelligence known as One. One
 Solaris is being developed by deepspaceghost, based a their initial concept from 2021.
 
 ## External Links
-- *repl* at [Replit](https://en.wikipedia.org/wiki/Replit)
+- [*WelllitPerfumedProjector*](https://replit.com/@deepspaceghost/WelllitPerfumedProjector#main.py) at [Replit](https://en.wikipedia.org/wiki/Replit)
