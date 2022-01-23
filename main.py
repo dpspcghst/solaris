@@ -35,39 +35,6 @@ wall_surface2.fill(dark_lime_green1)
 clock = game.time.Clock()
 
 
-def collision_detection(rect1, rect2, rect3):
-    """
-    """
-
-    if rect1.colliderect(rect2):
-
-        if player_rectangle.x > 0:  # Moving right; Hit left side of wall
-            player_rectangle.right = wall_rectangle1.left
-
-        if player_rectangle.x < 0:  # Moving left; Hit right side of wall
-            player_rectangle.left = wall_rectangle1.right
-
-        if player_rectangle.y > 0:  # Moving down; Hit top side of wall
-            player_rectangle.bottom = wall_rectangle1.top
-
-        if player_rectangle.y < 0:  # Moving up; Hit bottom side of wall
-            player_rectangle.top = wall_rectangle1.bottom
-
-    if rect1.colliderect(rect3):
-
-        if player_rectangle.x > 0:  # Moving right; Hit left side of wall
-            player_rectangle.right = wall_rectangle2.left
-
-        if player_rectangle.x < 0:  # Moving left; Hit right side of wall
-            player_rectangle.left = wall_rectangle2.right
-
-        if player_rectangle.y > 0:  # Moving down; Hit top side of wall
-            player_rectangle.bottom = wall_rectangle2.top
-
-        if player_rectangle.y < 0:  # Moving up; Hit bottom side of wall
-            player_rectangle.top = wall_rectangle2.bottom
-
-
 def event_loop():
     """
     """
@@ -90,17 +57,17 @@ def go(x, y):
         single_axis_go(0, y)
 
 
-def graphics_renderer(image1, image2, image3):
+def graphics_renderer():
     """
     """
 
     screen.fill(pure_lime_green)
-    screen.blit(player_surface, (image1.x, image1.y))
-    screen.blit(wall_surface1, (image2.x, image2.y))
-    screen.blit(wall_surface2, (image3.x, image3.y))
+    screen.blit(player_surface, (player_rectangle.x, player_rectangle.y))
+    screen.blit(wall_surface1, (wall_rectangle1.x, wall_rectangle1.y))
+    screen.blit(wall_surface2, (wall_rectangle2.x, wall_rectangle2.y))
 
 
-def player_input(rectangle):
+def player_input():
     """
     """
 
@@ -144,10 +111,11 @@ def main_loop():
     """
 
     while True:
+        # Process inputs
+        player_input()
         event_loop()
-        player_input(player_rectangle)
-        graphics_renderer(player_rectangle, wall_rectangle1, wall_rectangle2)
-        # collision_detection(player_rectangle, wall_rectangle1, wall_rectangle2)
+        # Generate outputs
+        graphics_renderer()
         game.display.update()
         clock.tick(60)
 
