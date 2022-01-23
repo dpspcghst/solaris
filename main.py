@@ -10,14 +10,20 @@ height = 450
 player_height = 25
 player_width = 13
 pure_lime_green = (0, 235, 0)  # pure lime green
+running_speed = 2.85
 very_dark_lime_green1 = (0, 39, 0)  # very dark lime green, first shade
 very_dark_lime_green2 = (0, 98, 0)  # very dark lime green, second shade
+walking_speed = 1.25
 wall_height = 125
 wall_width = 13
 width = 850
 
 screen = game.display.set_mode((width, height))
 game.display.set_caption("Solaris")
+
+player_rectangle = game.Rect(53, 53, player_width, player_height)
+wall_rectangle1 = game.Rect(125, 125, wall_width, wall_height)
+wall_rectangle2 = game.Rect(250, 125, wall_width, wall_height)
 
 player_surface = game.Surface((player_width, player_height))
 player_surface.fill(very_dark_lime_green1)
@@ -59,42 +65,47 @@ def player_input(person):
     if keys_pressed[game.K_DOWN]:
 
         if keys_pressed[game.K_LSHIFT]:
-            person.y += 2.85
+            person.y += running_speed
 
         else:
-            person.y += 1.25
+            person.y += walking_speed
 
     if keys_pressed[game.K_LEFT]:
 
         if keys_pressed[game.K_LSHIFT]:
-            person.x -= 2.85
+            person.x -= running_speed
 
         else:
-            person.x -= 1.25
+            person.x -= walking_speed
 
     if keys_pressed[game.K_RIGHT]:
 
         if keys_pressed[game.K_LSHIFT]:
-            person.x += 2.85
+            person.x += running_speed
 
         else:
-            person.x += 1.25
+            person.x += walking_speed
 
     if keys_pressed[game.K_UP]:
 
         if keys_pressed[game.K_LSHIFT]:
-            person.y -= 2.85
+            person.y -= running_speed
 
         else:
-            person.y -= 1.25
+            person.y -= walking_speed
 
 
 def test_function(rect1, rect2, rect3):
     """
     """
 
-    if rect1.colliderect(rect2) or rect1.colliderect(rect3):
+    if rect1.colliderect(rect2):
         print("Wall!")
+        player_rectangle.left = wall_rectangle1.right
+
+    elif rect1.colliderect(rect3):
+        print("Wall!")
+        player_rectangle.right = wall_rectangle2.left
 
     else:
         print("No Wall!")
@@ -103,10 +114,6 @@ def test_function(rect1, rect2, rect3):
 def main_loop():
     """
     """
-
-    player_rectangle = game.Rect(53, 53, player_width, player_height)
-    wall_rectangle1 = game.Rect(125, 125, wall_width, wall_height)
-    wall_rectangle2 = game.Rect(250, 125, wall_width, wall_height)
 
     while True:
         event_loop()
