@@ -1,8 +1,10 @@
 import pygame as game
 
 
+DARK_LIME_GREEN1 = (0, 137, 0)  # dark lime green, first shade
 MODE_WIDTH = 850
 MODE_HEIGHT = 450
+PURE_LIME_GREEN = (0, 235, 0)  # pure lime green
 
 
 class Wall(object):
@@ -133,8 +135,7 @@ while running:
             running = False
 
     # Draw the scene
-    screen.fill((0, 0, 0))
+    screen.fill(PURE_LIME_GREEN)
     for wall in walls:
-        game.draw.rect(screen, (255, 255, 255), wall.rect)
+        game.draw.rect(screen, DARK_LIME_GREEN1, wall.rect)
     game.display.flip()
-
