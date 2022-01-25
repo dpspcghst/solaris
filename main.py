@@ -1,5 +1,3 @@
-# Research Control building structure for level design
-
 from sys import exit
 
 import pygame as game
