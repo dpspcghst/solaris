@@ -1,3 +1,5 @@
+# Research Control building structure for level design
+
 from sys import exit
 
 import pygame as game
@@ -168,6 +170,9 @@ def wall1_collisions(x, y):
 
 def wall2_collisions(x, y):
     """
+    Depending on the direction of the player rectangle, this function keeps
+    the player from "phasing" through walls (i.e., treats the player and the
+    second wall as solid objects).
     """
 
     if x > 0:  # Going right; Hit left side of wall
