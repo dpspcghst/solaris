@@ -1,4 +1,4 @@
-# *Solaris* (2021 video game)
+# *Solaris* (2022 video game)
 ***Solaris*** is an science fiction action-adventure game.
 
 The game requires the player to search out an operating system looking for nine directories.
