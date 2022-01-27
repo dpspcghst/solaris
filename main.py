@@ -15,11 +15,6 @@ PLAYER_WIDTH = 80
 PURE_LIME_GREEN = (0, 235, 0)  # pure lime green
 VERY_DARK_LIME_GREEN1 = (0, 39, 0)  # very dark lime green, first shade
 VERY_DARK_LIME_GREEN2 = (0, 98, 0)  # very dark lime green, second shade
-# wall_test = [
-#     "        ",
-#     " wwwwwww"
-# ]
-# walls = []  # List to hold the walls
 
 # End initial variable assignments.
 
