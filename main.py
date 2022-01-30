@@ -53,6 +53,81 @@ class Item():
             self.width, self.height
         )
 
+    def get_body(self):
+        """
+        """
+
+        return self.body
+
+    def get_color(self):
+        """
+        """
+
+        return self.color
+
+    def get_height(self):
+        """
+        """
+
+        return self.height
+
+    def get_pos_x(self):
+        """
+        """
+
+        return self.pos_x
+
+    def get_pos_y(self):
+        """
+        """
+
+        return self.pos_y
+
+    def get_width(self):
+        """
+        """
+
+        return self.width
+
+    def rebuild_body(self):
+        """
+        """
+
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
+
+    def set_color(self, color):
+        """
+        """
+
+        self.color = color
+
+    def set_height(self, height):
+        """
+        """
+
+        self.height = height
+
+    def set_pos_x(self, pos_x):
+        """
+        """
+
+        self.pos_x = pos_x
+
+    def set_pos_y(self, pos_y):
+        """
+        """
+
+        self.pos_y = pos_y
+
+    def set_width(self, width):
+        """
+        """
+
+        self.width = width
+
 
 class Maze():
     """
