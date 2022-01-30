@@ -26,139 +26,224 @@ exit_surface.fill(BLACK)
 
 
 # Nice class to hold a wall rect
-class Wall(object):
+class Wall():
     """
     """
 
-    def __init__(self):
+    body = None
+
+    across_height = 0
+    across_width = 0
+
+    down_height = 0
+    down_width = 0
+
+    pos_x = 0
+    pos_y = 0
+
+    color = ''
+
+    def __init__(self, width, height, pos_x, pos_y, color):
         """
         """
 
-        WALL1_ACROSS_HEIGHT = 16
-        WALL1_ACROSS_WIDTH = 368
-        WALL1_DOWN_HEIGHT = 656
-        WALL1_DOWN_WIDTH = 16
-        WALL2_ACROSS_HEIGHT = 16
-        WALL2_ACROSS_WIDTH = 576
-        WALL2_DOWN_HEIGHT = 112
-        WALL2_DOWN_WIDTH = 16
+        self.height = height
+        self.width = width
 
-        self.rect1 = game.Rect(
-            16, 16, WALL1_ACROSS_WIDTH, WALL1_ACROSS_HEIGHT)
-        self.rect2 = game.Rect(16, 16, WALL1_DOWN_WIDTH, WALL1_DOWN_HEIGHT)
-        self.rect3 = game.Rect(368, 16, WALL2_DOWN_WIDTH, WALL2_DOWN_HEIGHT)
-        self.rect4 = game.Rect(
-            368, 112, WALL2_ACROSS_WIDTH, WALL2_ACROSS_HEIGHT)
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.color = color
+
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
+
+    def get_body(self):
+        return self.body
+
+    def rebuild_body(self):
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
+
+    def get_height(self):
+        return self.height
+
+    def set_height(self, height):
+        self.height = height
+
+    def get_width(self):
+        return self.width
+
+    def set_width(self, width):
+        self.width = width
+
+    def get_pos_x(self):
+        return self.pos_x
+
+    def set_pos_x(self, pos_x):
+        self.pos_x = pos_x
+
+    def get_pos_y(self):
+        return self.pos_y
+
+    def set_pos_y(self, pos_y):
+        self.pos_y = pos_y
+
+    def get_color(self):
+        return self.color
+
+    def set_color(self, color):
+        self.color = color
 
 
-wall = Wall()
-
-
-class Player(object):
+class Player():
     """
     """
 
-    def __init__(self):
+    body = None
+
+    width = 0
+    height = 0
+    pos_x = 0
+    pos_y = 0
+    color = None
+
+    def __init__(self, width, height, pos_x, pos_y, color):
         """
         """
 
-        self.rect = game.Rect(225, 425, PLAYER_WIDTH, PLAYER_HEIGHT)
+        self.height = height
+        self.width = width
 
-    def go(self, x, y):
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.color = color
+
+        self.body = game.Rect(self.pos_x, self.pos_y, self.width, self.height)
+
+    def go(self, x, y, walls):
         """
         """
 
         if x != 0:
-            self.single_axis_go(x, 0)
+            self.single_axis_go(x, 0, walls)
 
         if y != 0:
-            self.single_axis_go(0, y)
+            self.single_axis_go(0, y, walls)
 
-    def single_axis_go(self, x, y):
+    def single_axis_go(self, x, y, walls):
         """
         """
 
-        self.rect.x += x
-        self.rect.y += y
+        self.body.x += x
+        self.body.y += y
 
-        if self.rect.colliderect(wall.rect1):
-            self.wall1_collisions(x, y)
+        for wall in walls:
+            if self.body.colliderect(wall.get_body()):
+                self.wall_collisions(x, y, wall)
 
-        if self.rect.colliderect(wall.rect2):
-            self.wall2_collisions(x, y)
-
-        if self.rect.colliderect(wall.rect3):
-            self.wall3_collisions(x, y)
-
-        if self.rect.colliderect(wall.rect4):
-            self.wall3_collisions(x, y)
-
-    def wall1_collisions(self, x, y):
+    def wall_collisions(self, x, y, wall):
         """
         """
 
         if x > 0:  # Going right; Hit left side of wall
-            self.rect.right = wall.rect1.left
+            self.body.right = wall.get_body().left
 
         if x < 0:  # Going left; Hit right side of wall
-            self.rect.left = wall.rect1.right
+            self.body.left = wall.get_body().right
 
         if y > 0:  # Going down; Hit top side of wall
-            self.rect.bottom = wall.rect1.top
+            self.body.bottom = wall.get_body().top
 
         if y < 0:  # Going up; Hit bottom side of wall
-            self.rect.top = wall.rect1.bottom
+            self.body.top = wall.get_body().bottom
 
-    def wall2_collisions(self, x, y):
-        """
-        """
+    def get_body(self):
+        return self.body
 
-        if x > 0:  # Going right; Hit left side of wall
-            self.rect.right = wall.rect2.left
+    def rebuild_body(self):
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
 
-        if x < 0:  # Going left; Hit right side of wall
-            self.rect.left = wall.rect2.right
+    def get_height(self):
+        return self.height
 
-        if y > 0:  # Going down; Hit top side of wall
-            self.rect.bottom = wall.rect2.top
+    def set_height(self, height):
+        self.height = height
 
-        if y < 0:  # Going up; Hit bottom side of wall
-            self.rect.top = wall.rect2.bottom
+    def get_width(self):
+        return self.width
 
-    def wall3_collisions(self, x, y):
-        """
-        """
+    def set_width(self, width):
+        self.width = width
 
-        if x > 0:  # Going right; Hit left side of wall
-            self.rect.right = wall.rect3.left
+    def get_pos_x(self):
+        return self.pos_x
 
-        if x < 0:  # Going left; Hit right side of wall
-            self.rect.left = wall.rect3.right
+    def set_pos_x(self, pos_x):
+        self.pos_x = pos_x
 
-        if y > 0:  # Going down; Hit top side of wall
-            self.rect.bottom = wall.rect3.top
+    def get_pos_y(self):
+        return self.pos_y
 
-        if y < 0:  # Going up; Hit bottom side of wall
-            self.rect.top = wall.rect3.bottom
+    def set_pos_y(self, pos_y):
+        self.pos_y = pos_y
 
-    def wall4_collisions(self, x, y):
-        """
-        """
+    def get_color(self):
+        return self.color
 
-        if x > 0:  # Going right; Hit left side of wall
-            self.rect.right = wall.rect4.left
-
-        if x < 0:  # Going left; Hit right side of wall
-            self.rect.left = wall.rect4.right
-
-        if y > 0:  # Going down; Hit top side of wall
-            self.rect.bottom = wall.rect4.top
-
-        if y < 0:  # Going up; Hit bottom side of wall
-            self.rect.top = wall.rect4.bottom
+    def set_color(self, color):
+        self.color = color
 
 
-player = Player()
+def get_walls():
+    walls = []
+
+    wall_1 = Wall(
+        width=368,
+        height=16,
+        pos_x=16,
+        pos_y=16,
+        color=DARK_LIME_GREEN1
+    )
+
+    wall_2 = Wall(
+        width=16,
+        height=656,
+        pos_x=16,
+        pos_y=16,
+        color=DARK_LIME_GREEN1
+    )
+
+    wall_3 = Wall(
+        width=16,
+        height=112,
+        pos_x=368,
+        pos_y=16,
+        color=DARK_LIME_GREEN1
+    )
+
+    wall_4 = Wall(
+        width=576,
+        height=16,
+        pos_x=368,
+        pos_y=112,
+        color=DARK_LIME_GREEN1
+    )
+
+    walls.append(wall_1)
+    walls.append(wall_2)
+    walls.append(wall_3)
+    walls.append(wall_4)
+
+    return walls
 
 
 def event_loop():
@@ -172,13 +257,20 @@ def event_loop():
             exit()
 
 
-def graphics_renderer():
+def graphics_renderer(player, walls):
     """
     """
 
+    # Background
     screen.fill(PURE_LIME_GREEN)
-    maze_builder()
-    game.draw.rect(screen, VERY_DARK_LIME_GREEN1, player.rect)
+
+    # Build maze
+    build_maze(screen, walls)
+
+    # Build player
+    game.draw.rect(screen, player.get_color(), player.get_body())
+
+    # Flip display
     game.display.flip()
 
 
@@ -188,27 +280,28 @@ def main_loop():
 
     clock = game.time.Clock()
 
+    walls = get_walls()
+    player = Player(PLAYER_WIDTH, PLAYER_HEIGHT, 225, 425, VERY_DARK_LIME_GREEN1)
+
     while True:
         # Process inputs
-        player_input()
+        player_input(player, walls)
         event_loop()
         # Update game world
         # Generate outputs
-        graphics_renderer()
+        graphics_renderer(player, walls)
         clock.tick(60)
 
 
-def maze_builder():
+def build_maze(screen, walls):
     """
     """
 
-    game.draw.rect(screen, DARK_LIME_GREEN1, wall.rect1)
-    game.draw.rect(screen, DARK_LIME_GREEN1, wall.rect2)
-    game.draw.rect(screen, DARK_LIME_GREEN1, wall.rect3)
-    game.draw.rect(screen, DARK_LIME_GREEN1, wall.rect4)
+    for wall in walls:
+        game.draw.rect(screen, wall.get_color(), wall.get_body())
 
 
-def player_input():
+def player_input(player, walls):
     """
     """
 
@@ -216,16 +309,16 @@ def player_input():
     key = game.key.get_pressed()
 
     if key[game.K_DOWN]:
-        player.go(0, MOVING_SPEED)
+        player.go(0, MOVING_SPEED, walls)
 
     if key[game.K_LEFT]:
-        player.go(-MOVING_SPEED, 0)
+        player.go(-MOVING_SPEED, 0, walls)
 
     if key[game.K_RIGHT]:
-        player.go(MOVING_SPEED, 0)
+        player.go(MOVING_SPEED, 0, walls)
 
     if key[game.K_UP]:
-        player.go(0, -MOVING_SPEED)
+        player.go(0, -MOVING_SPEED, walls)
 
 
 if __name__ == "__main__":
