@@ -10,42 +10,37 @@ DARK_LIME_GREEN1 = (0, 137, 0)  # dark lime green, first shade
 DARK_LIME_GREEN2 = (0, 177, 0)  # dark lime green, second shade
 MODE_HEIGHT = 450
 MODE_WIDTH = 850
-PLAYER_HEIGHT = 80
-PLAYER_WIDTH = 80
+PLAYER_HEIGHT = 16
+PLAYER_WIDTH = 16
 PURE_LIME_GREEN = (0, 235, 0)  # pure lime green
 VERY_DARK_LIME_GREEN1 = (0, 39, 0)  # very dark lime green, first shade
 VERY_DARK_LIME_GREEN2 = (0, 98, 0)  # very dark lime green, second shade
 
-# End initial variable assignments.
+# End constant variable assignments.
 
 game.display.set_caption(CAPTION)
 screen = game.display.set_mode((MODE_WIDTH, MODE_HEIGHT))
 
-exit_surface = game.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
-exit_surface.fill(BLACK)
 
-
-# Nice class to hold a wall rect
-class Wall():
+class Item():
     """
     """
 
     body = None
 
-    across_height = 0
-    across_width = 0
+    color = None
 
-    down_height = 0
-    down_width = 0
+    height = 0
+    width = 0
 
     pos_x = 0
     pos_y = 0
 
-    color = ''
+    def __init__(self, color, height, pos_x, pos_y, width):
+        """
+        """
 
-    def __init__(self, width, height, pos_x, pos_y, color):
-        """
-        """
+        self.color = color
 
         self.height = height
         self.width = width
@@ -53,51 +48,21 @@ class Wall():
         self.pos_x = pos_x
         self.pos_y = pos_y
 
-        self.color = color
-
         self.body = game.Rect(
             self.pos_x, self.pos_y,
             self.width, self.height
         )
 
-    def get_body(self):
-        return self.body
 
-    def rebuild_body(self):
-        self.body = game.Rect(
-            self.pos_x, self.pos_y,
-            self.width, self.height
-        )
+class Maze():
+    """
+    """
 
-    def get_height(self):
-        return self.height
+    def __init__(self):
+        """
+        """
 
-    def set_height(self, height):
-        self.height = height
-
-    def get_width(self):
-        return self.width
-
-    def set_width(self, width):
-        self.width = width
-
-    def get_pos_x(self):
-        return self.pos_x
-
-    def set_pos_x(self, pos_x):
-        self.pos_x = pos_x
-
-    def get_pos_y(self):
-        return self.pos_y
-
-    def set_pos_y(self, pos_y):
-        self.pos_y = pos_y
-
-    def get_color(self):
-        return self.color
-
-    def set_color(self, color):
-        self.color = color
+        pass
 
 
 class Player():
@@ -106,15 +71,19 @@ class Player():
 
     body = None
 
-    width = 0
-    height = 0
-    pos_x = 0
-    pos_y = 0
     color = None
 
-    def __init__(self, width, height, pos_x, pos_y, color):
+    height = 0
+    width = 0
+
+    pos_x = 0
+    pos_z = 0
+
+    def __init__(self, color, height, pos_x, pos_y, width):
         """
         """
+
+        self.color = color
 
         self.height = height
         self.width = width
@@ -122,11 +91,48 @@ class Player():
         self.pos_x = pos_x
         self.pos_y = pos_y
 
-        self.color = color
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
 
-        self.body = game.Rect(self.pos_x, self.pos_y, self.width, self.height)
+    def get_body(self):
+        """
+        """
 
-    def go(self, x, y, walls):
+        return self.body
+
+    def get_color(self):
+        """
+        """
+
+        return self.color
+
+    def get_height(self):
+        """
+        """
+
+        return self.height
+
+    def get_pos_x(self):
+        """
+        """
+
+        return self.pos_x
+
+    def get_pos_y(self):
+        """
+        """
+
+        return self.pos_y
+
+    def get_width(self):
+        """
+        """
+
+        return self.width
+
+    def go(self, walls, x, y):
         """
         """
 
@@ -136,114 +142,188 @@ class Player():
         if y != 0:
             self.single_axis_go(0, y, walls)
 
-    def single_axis_go(self, x, y, walls):
-        """
-        """
-
-        self.body.x += x
-        self.body.y += y
-
-        for wall in walls:
-            if self.body.colliderect(wall.get_body()):
-                self.wall_collisions(x, y, wall)
-
-    def wall_collisions(self, x, y, wall):
-        """
-        """
-
-        if x > 0:  # Going right; Hit left side of wall
-            self.body.right = wall.get_body().left
-
-        if x < 0:  # Going left; Hit right side of wall
-            self.body.left = wall.get_body().right
-
-        if y > 0:  # Going down; Hit top side of wall
-            self.body.bottom = wall.get_body().top
-
-        if y < 0:  # Going up; Hit bottom side of wall
-            self.body.top = wall.get_body().bottom
-
-    def get_body(self):
-        return self.body
-
     def rebuild_body(self):
+        """
+        """
+
         self.body = game.Rect(
             self.pos_x, self.pos_y,
             self.width, self.height
         )
 
-    def get_height(self):
-        return self.height
-
-    def set_height(self, height):
-        self.height = height
-
-    def get_width(self):
-        return self.width
-
-    def set_width(self, width):
-        self.width = width
-
-    def get_pos_x(self):
-        return self.pos_x
-
-    def set_pos_x(self, pos_x):
-        self.pos_x = pos_x
-
-    def get_pos_y(self):
-        return self.pos_y
-
-    def set_pos_y(self, pos_y):
-        self.pos_y = pos_y
-
-    def get_color(self):
-        return self.color
-
     def set_color(self, color):
+        """
+        """
+
         self.color = color
 
+    def set_height(self, height):
+        """
+        """
 
-def get_walls():
-    walls = []
+        self.height = height
 
-    wall_1 = Wall(
-        width=368,
-        height=16,
-        pos_x=16,
-        pos_y=16,
-        color=DARK_LIME_GREEN1
-    )
+    def set_pos_x(self, pos_x):
+        """
+        """
 
-    wall_2 = Wall(
-        width=16,
-        height=656,
-        pos_x=16,
-        pos_y=16,
-        color=DARK_LIME_GREEN1
-    )
+        self.pos_x = pos_x
 
-    wall_3 = Wall(
-        width=16,
-        height=112,
-        pos_x=368,
-        pos_y=16,
-        color=DARK_LIME_GREEN1
-    )
+    def set_pos_y(self, pos_y):
+        """
+        """
 
-    wall_4 = Wall(
-        width=576,
-        height=16,
-        pos_x=368,
-        pos_y=112,
-        color=DARK_LIME_GREEN1
-    )
+        self.pos_y = pos_y
 
-    walls.append(wall_1)
-    walls.append(wall_2)
-    walls.append(wall_3)
-    walls.append(wall_4)
+    def set_width(self, width):
+        """
+        """
 
-    return walls
+        self.width = width
+
+    def single_axis_go(self, walls, x, y):
+        """
+        """
+
+        self.rect.x += x
+        self.rect.y += y
+
+        for wall in walls:
+
+            if self.rect.colliderect(walls.rect):
+                self.wall_collisions(walls, x, y)
+
+    def wall_collisions(self, wall, x, y):
+        """
+        """
+
+        if x > 0:  # Going right; Hit left side of wall
+            self.rect.right = wall.get_body().left
+
+        if x < 0:  # Going left; Hit right side of wall
+            self.rect.left = wall.get_body().right
+
+        if y > 0:  # Going down; Hit top side of wall
+            self.rect.bottom = wall.get_body().top
+
+        if y < 0:  # Going up; Hit bottom side of wall
+            self.rect.top = wall.get_body().bottom
+
+
+class Wall():
+    """
+    Nice class to hold a wall rect.
+    """
+
+    body = None
+
+    color = None
+
+    height = 0
+    width = 0
+
+    pos_x = 0
+    pos_y = 0
+
+    def __init__(self, color, height, pos_x, pos_y, width):
+        """
+        """
+
+        self.color = color
+
+        self.height = height
+        self.width = width
+
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
+
+    def get_body(self):
+        """
+        """
+
+        return self.body
+
+    def get_color(self):
+        """
+        """
+
+        return self.color
+
+    def get_height(self):
+        """
+        """
+
+        return self.height
+
+    def get_pos_x(self):
+        """
+        """
+
+        return self.pos_x
+
+    def get_pos_y(self):
+        """
+        """
+
+        return self.pos_y
+
+    def get_width(self):
+        """
+        """
+
+        return self.width
+
+    def rebuild_body(self):
+        """
+        """
+
+        self.body = game.Rect(
+            self.pos_x, self.pos_y,
+            self.width, self.height
+        )
+
+    def set_color(self, color):
+        """
+        """
+
+        self.color = color
+
+    def set_height(self, height):
+        """
+        """
+
+        self.height = height
+
+    def set_pos_x(self, pos_x):
+        """
+        """
+
+        self.pos_x = pos_x
+
+    def set_pos_y(self, pos_y):
+        """
+        """
+
+        self.pos_y = pos_y
+
+    def set_width(self, width):
+        """
+        """
+
+        self.width = width
+
+
+def build_maze(screen, walls):
+    """
+    """
+
+    for wall in walls:
+        game.draw.rect(screen, wall.get_color(), wall.get_body())
 
 
 def event_loop():
@@ -255,6 +335,28 @@ def event_loop():
         if event.type == game.QUIT:
             game.quit()
             exit()
+
+
+def get_walls():
+    """
+    """
+
+    walls = []
+
+    wall_1 = Wall()
+
+    wall_2 = Wall()
+
+    wall_3 = Wall()
+
+    wall_4 = Wall()
+
+    walls.append(wall_1)
+    walls.append(wall_2)
+    walls.append(wall_3)
+    walls.append(wall_4)
+
+    return walls
 
 
 def graphics_renderer(player, walls):
@@ -278,10 +380,12 @@ def main_loop():
     """
     """
 
-    clock = game.time.Clock()
-
+    player = Player(
+        PLAYER_WIDTH, PLAYER_HEIGHT, 225, 425, VERY_DARK_LIME_GREEN1
+    )
     walls = get_walls()
-    player = Player(PLAYER_WIDTH, PLAYER_HEIGHT, 225, 425, VERY_DARK_LIME_GREEN1)
+
+    clock = game.time.Clock()
 
     while True:
         # Process inputs
@@ -293,32 +397,24 @@ def main_loop():
         clock.tick(60)
 
 
-def build_maze(screen, walls):
-    """
-    """
-
-    for wall in walls:
-        game.draw.rect(screen, wall.get_color(), wall.get_body())
-
-
 def player_input(player, walls):
     """
     """
 
-    MOVING_SPEED = 2.05
+    MOVING_SPEED = 1  # This number cannot be a negative float.
     key = game.key.get_pressed()
 
     if key[game.K_DOWN]:
-        player.go(0, MOVING_SPEED, walls)
+        player.go(walls, 0, MOVING_SPEED)
 
     if key[game.K_LEFT]:
-        player.go(-MOVING_SPEED, 0, walls)
+        player.go(walls, -MOVING_SPEED, 0)
 
     if key[game.K_RIGHT]:
-        player.go(MOVING_SPEED, 0, walls)
+        player.go(walls, MOVING_SPEED, 0)
 
     if key[game.K_UP]:
-        player.go(0, -MOVING_SPEED, walls)
+        player.go(walls, 0, -MOVING_SPEED)
 
 
 if __name__ == "__main__":
