@@ -425,7 +425,8 @@ def event_loop():
 
 def get_walls():
     """
-    Lengthen walls 13 and 14 until they meet. Move walls 9 and 10 by 16 pixels. Lengthen wall 5 by 16 pixels.
+    Lengthen walls 13 and 14 until they meet. Move walls 9 and 10 to the right
+    by 16 pixels. Lengthen wall 5 by 16 pixels.
     """
 
     walls = []
