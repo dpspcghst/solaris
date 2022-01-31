@@ -212,10 +212,10 @@ class Player():
         """
 
         if x != 0:
-            self.single_axis_go(x, 0, walls)
+            self.single_axis_go(walls, x, 0)
 
         if y != 0:
-            self.single_axis_go(0, y, walls)
+            self.single_axis_go(walls, 0, y)
 
     def rebuild_body(self):
         """
@@ -260,29 +260,32 @@ class Player():
         """
         """
 
-        self.rect.x += x
-        self.rect.y += y
+        self.body.x += x
+        self.body.y += y
+
+        print(f"{self.body.x}, {self.body.y}")
 
         for wall in walls:
 
-            if self.rect.colliderect(walls.rect):
-                self.wall_collisions(walls, x, y)
+            if self.body.colliderect(wall.get_body()):
+                self.wall_collisions(wall, x, y)
+                print(wall)
 
     def wall_collisions(self, wall, x, y):
         """
         """
 
         if x > 0:  # Going right; Hit left side of wall
-            self.rect.right = wall.get_body().left
+            self.body.right = wall.get_body().left
 
         if x < 0:  # Going left; Hit right side of wall
-            self.rect.left = wall.get_body().right
+            self.body.left = wall.get_body().right
 
         if y > 0:  # Going down; Hit top side of wall
-            self.rect.bottom = wall.get_body().top
+            self.body.bottom = wall.get_body().top
 
         if y < 0:  # Going up; Hit bottom side of wall
-            self.rect.top = wall.get_body().bottom
+            self.body.top = wall.get_body().bottom
 
 
 class Wall():
@@ -293,6 +296,7 @@ class Wall():
     body = None
 
     color = None
+    name = ""
 
     height = 0
     width = 0
@@ -300,11 +304,12 @@ class Wall():
     pos_x = 0
     pos_y = 0
 
-    def __init__(self, color, height, pos_x, pos_y, width):
+    def __init__(self, color, height, name, pos_x, pos_y, width):
         """
         """
 
         self.color = color
+        self.name = name
 
         self.height = height
         self.width = width
@@ -316,6 +321,12 @@ class Wall():
             self.pos_x, self.pos_y,
             self.width, self.height
         )
+
+    def __str__(self):
+        """
+        """
+
+        return f"{self.name}"
 
     def get_body(self):
         """
@@ -414,22 +425,151 @@ def event_loop():
 
 def get_walls():
     """
+    Lengthen walls 13 and 14 until the meet. Move walls 9 and 10 by pixels. Lengthen wall 5 by 16 pixels.
     """
 
     walls = []
 
-    wall_1 = Wall()
+    wall_1 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=176,
+        name="One",
+        pos_x=0,
+        pos_y=0,
+        width=16
+    )
 
-    wall_2 = Wall()
+    wall_2 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Two",
+        pos_x=0,
+        pos_y=0,
+        width=144
+    )
 
-    wall_3 = Wall()
+    wall_3 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=48,
+        name="Three",
+        pos_x=128,
+        pos_y=0,
+        width=16
+    )
 
-    wall_4 = Wall()
+    wall_4 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Four",
+        pos_x=128,
+        pos_y=32,
+        width=272
+    )
+
+    wall_5 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Five",
+        pos_x=128,
+        pos_y=96,
+        width=272
+    )
+
+    wall_6 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=208,
+        name="Six",
+        pos_x=128,
+        pos_y=112,
+        width=16
+    )
+
+    wall_7 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Seven",
+        pos_x=64,
+        pos_y=224,
+        width=80
+    )
+
+    wall_8 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=80,
+        name="Eight",
+        pos_x=64,
+        pos_y=224,
+        width=16
+    )
+
+    wall_9 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=192,
+        name="Nine",
+        pos_x=384,
+        pos_y=96,
+        width=16
+    )
+
+    wall_10 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Ten",
+        pos_x=352,
+        pos_y=288,
+        width=80
+    )
+
+    wall_11 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Eleven",
+        pos_x=128,
+        pos_y=160,
+        width=80
+    )
+
+    wall_12 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Twelve",
+        pos_x=256,
+        pos_y=160,
+        width=80
+    )
+
+    wall_13 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=16,
+        name="Thirteen",
+        pos_x=144,
+        pos_y=288,
+        width=80
+    )
+
+    wall_14 = Wall(
+        color=DARK_LIME_GREEN1,
+        height=80,
+        name="Fourteen",
+        pos_x=336,
+        pos_y=160,
+        width=16
+    )
 
     walls.append(wall_1)
     walls.append(wall_2)
     walls.append(wall_3)
     walls.append(wall_4)
+    walls.append(wall_5)
+    walls.append(wall_6)
+    walls.append(wall_7)
+    walls.append(wall_8)
+    walls.append(wall_9)
+    walls.append(wall_10)
+    walls.append(wall_11)
+    walls.append(wall_12)
+    walls.append(wall_13)
+    walls.append(wall_14)
 
     return walls
 
@@ -456,7 +596,11 @@ def main_loop():
     """
 
     player = Player(
-        PLAYER_WIDTH, PLAYER_HEIGHT, 225, 425, VERY_DARK_LIME_GREEN1
+        color=VERY_DARK_LIME_GREEN1,
+        height=PLAYER_HEIGHT,
+        pos_x=225,
+        pos_y=225,
+        width=PLAYER_WIDTH
     )
     walls = get_walls()
 
