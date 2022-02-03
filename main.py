@@ -2,24 +2,98 @@ from sys import exit
 
 import pygame as game
 
-game.init()
+from debug import debug
+from level import Level
+from player import Player
+from settings import *
 
 BLACK = (0, 0, 0)
-CAPTION = "Solaris"
 DARK_LIME_GREEN1 = (0, 137, 0)  # dark lime green, first shade
 DARK_LIME_GREEN2 = (0, 177, 0)  # dark lime green, second shade
-MODE_HEIGHT = 450
-MODE_WIDTH = 850
-PLAYER_HEIGHT = 16
-PLAYER_WIDTH = 16
+horizontal_scroll = 0
 PURE_LIME_GREEN = (0, 235, 0)  # pure lime green
+vertical_scroll = 0
 VERY_DARK_LIME_GREEN1 = (0, 39, 0)  # very dark lime green, first shade
 VERY_DARK_LIME_GREEN2 = (0, 98, 0)  # very dark lime green, second shade
 
-# End constant variable assignments.
 
-game.display.set_caption(CAPTION)
-screen = game.display.set_mode((MODE_WIDTH, MODE_HEIGHT))
+class Game():
+    """
+    """
+
+    def __init__(self):
+        """
+        General setup.
+        """
+
+        game.init()
+
+        self.screen = game.display.set_mode((MODE_WIDTH, MODE_HEIGHT))
+        game.display.set_caption("Solaris")
+        self.clock = game.time.Clock()
+
+        self.level = Level()
+
+    def get_clock(self):
+        """
+        """
+
+        return self.clock
+
+    def get_level(self):
+        """
+        """
+
+        return self.level
+
+    def get_screen(self):
+        """
+        """
+
+        return self.screen
+
+    def render_graphics(self, player, walls):
+        """
+        """
+
+        # Background
+        self.screen.fill(PURE_LIME_GREEN)
+
+        # Build maze.
+        build_maze(self.screen, walls)
+
+        debug("Fix")
+
+        # Build player.
+        game.draw.rect(self.screen, player.get_color(), player.get_body())
+
+        # Flip display.
+        game.display.flip()
+
+        game.display.update()
+
+    def run(self):
+        """
+        """
+
+        player = Player(
+            color=VERY_DARK_LIME_GREEN1,
+            height=PLAYER_HEIGHT,
+            pos_x=225,
+            pos_y=225,
+            width=PLAYER_WIDTH
+        )
+        walls = get_walls()
+
+        while True:
+            # Process inputs
+            player_input(player, walls)
+            loop_events()
+            # Update game world
+            # Generate outputs
+            self.render_graphics(player, walls)
+            self.level.run()
+            self.clock.tick(FPS)
 
 
 class Item():
@@ -264,21 +338,10 @@ def build_maze(screen, walls):
         game.draw.rect(screen, wall.get_color(), wall.get_body())
 
 
-def event_loop():
-    """
-    """
-
-    for event in game.event.get():
-
-        if event.type == game.QUIT:
-            game.quit()
-            exit()
-
-
 def get_walls():
     """
     Lengthen walls 13 and 14 until they meet. Move walls 9 and 10 to the right
-    by 16 pixels. Lengthen wall 5 by 16 pixels.
+    by 16 pixels.
     """
 
     walls = []
@@ -287,8 +350,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=176,
         name="One",
-        pos_x=0,
-        pos_y=0,
+        pos_x=0 - horizontal_scroll,
+        pos_y=0 - vertical_scroll,
         width=16
     )
 
@@ -296,8 +359,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Two",
-        pos_x=0,
-        pos_y=0,
+        pos_x=0 - horizontal_scroll,
+        pos_y=0 - vertical_scroll,
         width=144
     )
 
@@ -305,8 +368,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=48,
         name="Three",
-        pos_x=128,
-        pos_y=0,
+        pos_x=128 - horizontal_scroll,
+        pos_y=0 - vertical_scroll,
         width=16
     )
 
@@ -314,8 +377,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Four",
-        pos_x=128,
-        pos_y=32,
+        pos_x=128 - horizontal_scroll,
+        pos_y=32 - vertical_scroll,
         width=272
     )
 
@@ -323,17 +386,17 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Five",
-        pos_x=128,
-        pos_y=96,
-        width=272
+        pos_x=128 - horizontal_scroll,
+        pos_y=96 - vertical_scroll,
+        width=304
     )
 
     wall_6 = Wall(
         color=DARK_LIME_GREEN1,
         height=208,
         name="Six",
-        pos_x=128,
-        pos_y=112,
+        pos_x=128 - horizontal_scroll,
+        pos_y=112 - vertical_scroll,
         width=16
     )
 
@@ -341,8 +404,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Seven",
-        pos_x=64,
-        pos_y=224,
+        pos_x=64 - horizontal_scroll,
+        pos_y=224 - vertical_scroll,
         width=80
     )
 
@@ -350,8 +413,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=80,
         name="Eight",
-        pos_x=64,
-        pos_y=224,
+        pos_x=64 - horizontal_scroll,
+        pos_y=224 - vertical_scroll,
         width=16
     )
 
@@ -359,8 +422,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=192,
         name="Nine",
-        pos_x=384,
-        pos_y=96,
+        pos_x=432 - horizontal_scroll,
+        pos_y=96 - vertical_scroll,
         width=16
     )
 
@@ -368,8 +431,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Ten",
-        pos_x=352,
-        pos_y=288,
+        pos_x=400 - horizontal_scroll,
+        pos_y=288 - vertical_scroll,
         width=80
     )
 
@@ -377,8 +440,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Eleven",
-        pos_x=128,
-        pos_y=160,
+        pos_x=128 - horizontal_scroll,
+        pos_y=160 - vertical_scroll,
         width=80
     )
 
@@ -386,8 +449,8 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Twelve",
-        pos_x=256,
-        pos_y=160,
+        pos_x=256 - horizontal_scroll,
+        pos_y=160 - vertical_scroll,
         width=80
     )
 
@@ -395,17 +458,17 @@ def get_walls():
         color=DARK_LIME_GREEN1,
         height=16,
         name="Thirteen",
-        pos_x=144,
-        pos_y=288,
-        width=80
+        pos_x=144 - horizontal_scroll,
+        pos_y=288 - vertical_scroll,
+        width=208
     )
 
     wall_14 = Wall(
         color=DARK_LIME_GREEN1,
-        height=80,
+        height=128,
         name="Fourteen",
-        pos_x=336,
-        pos_y=160,
+        pos_x=336 - horizontal_scroll,
+        pos_y=160 - vertical_scroll,
         width=16
     )
 
@@ -427,46 +490,15 @@ def get_walls():
     return walls
 
 
-def graphics_renderer(player, walls):
+def loop_events():
     """
     """
 
-    # Background
-    screen.fill(PURE_LIME_GREEN)
+    for event in game.event.get():
 
-    # Build maze
-    build_maze(screen, walls)
-
-    # Build player
-    game.draw.rect(screen, player.get_color(), player.get_body())
-
-    # Flip display
-    game.display.flip()
-
-
-def main_loop():
-    """
-    """
-
-    player = Player(
-        color=VERY_DARK_LIME_GREEN1,
-        height=PLAYER_HEIGHT,
-        pos_x=225,
-        pos_y=225,
-        width=PLAYER_WIDTH
-    )
-    walls = get_walls()
-
-    clock = game.time.Clock()
-
-    while True:
-        # Process inputs
-        player_input(player, walls)
-        event_loop()
-        # Update game world
-        # Generate outputs
-        graphics_renderer(player, walls)
-        clock.tick(60)
+        if event.type == game.QUIT:
+            game.quit()
+            exit()
 
 
 def player_input(player, walls):
@@ -475,6 +507,7 @@ def player_input(player, walls):
 
     MOVING_SPEED = 1  # This number cannot be a negative float.
     key = game.key.get_pressed()
+    # joysticks = game.joystick.get_count()
 
     if key[game.K_DOWN]:
         player.go(walls, 0, MOVING_SPEED)
@@ -490,4 +523,5 @@ def player_input(player, walls):
 
 
 if __name__ == "__main__":
-    main_loop()
+    game = Game()
+    game.run()
