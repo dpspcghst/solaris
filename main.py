@@ -8,10 +8,8 @@ from player import Player
 from settings import *
 
 BLACK = (0, 0, 0)
-DARK_LIME_GREEN1 = (0, 137, 0)  # dark lime green, first shade
 DARK_LIME_GREEN2 = (0, 177, 0)  # dark lime green, second shade
 horizontal_scroll = 0
-PURE_LIME_GREEN = (0, 235, 0)  # pure lime green
 vertical_scroll = 0
 VERY_DARK_LIME_GREEN1 = (0, 39, 0)  # very dark lime green, first shade
 VERY_DARK_LIME_GREEN2 = (0, 98, 0)  # very dark lime green, second shade
@@ -29,6 +27,7 @@ class Game():
         game.init()
 
         self.screen = game.display.set_mode((MODE_WIDTH, MODE_HEIGHT))
+        self.screen.fill(PURE_LIME_GREEN)
         game.display.set_caption("Solaris")
         self.clock = game.time.Clock()
 
