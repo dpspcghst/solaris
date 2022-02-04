@@ -2,6 +2,8 @@ from sys import exit
 
 import pygame as game
 
+from player import Player
+
 game.init()
 
 BLACK = (0, 0, 0)
