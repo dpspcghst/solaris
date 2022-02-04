@@ -13,6 +13,7 @@ class Tile(game.sprite.Sprite):
 
         super().__init__(groups)
         self.image = game.Surface((TILE_WIDTH, TILE_HEIGHT))
+        self.image.fill(DARK_LIME_GREEN1)
         self.rect = self.image.get_rect(topleft=pos)
 
     def get_image(self):
